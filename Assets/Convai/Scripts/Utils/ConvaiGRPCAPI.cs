@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using DefaultNamespace;
 using Google.Protobuf;
 using Grpc.Core;
 using Service;
 using UnityEngine;
+using UnityEngine.Serialization;
 using static Service.GetResponseRequest.Types;
 
 namespace Convai.Scripts.Utils
@@ -24,13 +27,18 @@ namespace Convai.Scripts.Utils
         "https://docs.convai.com/api-docs/plugins-and-integrations/unity-plugin/scripts-overview/convaigrpcapi.cs")]
     public class ConvaiGRPCAPI : MonoBehaviour
     {
+        [FormerlySerializedAs("responseList")] [Header("Recording")]
+        public TestConfig testConfig;
+        
         public static ConvaiGRPCAPI Instance;
         private readonly List<string> _stringUserText = new();
         private ConvaiNPC _activeConvaiNPC;
         private CancellationTokenSource _cancellationTokenSource;
         private ConvaiChatUIHandler _chatUIHandler;
+        private TestManager _testManager;
         private string APIKey { get; set; }
 
+        
         private void Awake()
         {
             // Singleton pattern: Ensure only one instance of this script is active.
@@ -62,6 +70,8 @@ namespace Convai.Scripts.Utils
         {
             ConvaiNPCManager.Instance.OnActiveNPCChanged += HandleActiveNPCChanged;
             _cancellationTokenSource = new CancellationTokenSource();
+            _testManager = FindObjectOfType<TestManager>();
+
         }
 
         private void FixedUpdate()
@@ -219,6 +229,7 @@ namespace Convai.Scripts.Utils
 
             try
             {
+                
                 await call.RequestStream.WriteAsync(getResponseConfigRequest);
                 await call.RequestStream.WriteAsync(new GetResponseRequest
                 {
@@ -516,7 +527,10 @@ namespace Convai.Scripts.Utils
                     pos = newPos;
                 }
             }
-
+            if (!testConfig.recordMode && _testManager.testMode == TestMode.GesturesAndFillerWords)
+            {
+                _testManager.StartCoroutine(_testManager.FillerSequence());
+            }
             // Process any remaining audio data.
             await ProcessAudioChunk(call,
                 Microphone.GetPosition(MicrophoneManager.Instance.GetSelectedMicrophoneDevice()) - pos,
@@ -646,6 +660,7 @@ namespace Convai.Scripts.Utils
         /// </summary>
         /// <param name="call">gRPC Streaming call connecting to the getResponse function</param>
         /// <param name="cancellationToken"></param>
+        
         private async Task ReceiveResultFromServer(
             AsyncDuplexStreamingCall<GetResponseRequest, GetResponseResponse> call, CancellationToken cancellationToken)
         {
@@ -669,8 +684,10 @@ namespace Convai.Scripts.Utils
                             Logger.Info(result.AudioResponse.TextData, Logger.LogCategory.Character);
 
                         if (result.AudioResponse.AudioData != null)
+                        {
                             // Add response to the list in the active NPC
                             _activeConvaiNPC.GetResponseResponses.Enqueue(call.ResponseStream.Current);
+                        }
 
                         if (result.AudioResponse.FaceData != null)
                             Logger.Info(
@@ -680,14 +697,21 @@ namespace Convai.Scripts.Utils
                         if (result.AudioResponse.VisemesData != null)
                             if (_activeConvaiNPC.convaiLipSync != null)
                             {
+                                
                                 Logger.Info(result.AudioResponse.VisemesData, Logger.LogCategory.LipSync);
 
-                                if (result.AudioResponse.VisemesData.Visemes.Sil == -2)
+                                if (result.AudioResponse.VisemesData.Visemes.Sil == -2){
                                     _activeConvaiNPC.convaiLipSync.faceDataList.Add(new List<VisemesData>());
+                                    if (testConfig.recordMode) testConfig.Set(result.AudioResponse.VisemesData);
+                                }
                                 else
+                                {
                                     _activeConvaiNPC.convaiLipSync
                                         .faceDataList[_activeConvaiNPC.convaiLipSync.faceDataList.Count - 1]
                                         .Add(result.AudioResponse.VisemesData);
+                                    if (testConfig.recordMode) testConfig.Set(result.AudioResponse.VisemesData);
+
+                                }
                             }
                     }
 

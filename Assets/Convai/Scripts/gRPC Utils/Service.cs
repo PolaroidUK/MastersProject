@@ -5,6 +5,7 @@
 #pragma warning disable 1591, 0612, 3021
 #region Designer generated code
 
+using System;
 using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
@@ -3556,7 +3557,8 @@ namespace Service {
 
   }
 
-  public sealed partial class VisemesData : pb::IMessage<VisemesData> {
+  [Serializable]
+  public partial class VisemesData : pb::IMessage<VisemesData> {
     private static readonly pb::MessageParser<VisemesData> _parser = new pb::MessageParser<VisemesData>(() => new VisemesData());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3694,7 +3696,8 @@ namespace Service {
   /// <summary>
   /// Define the Viseme message with all the individual viseme values
   /// </summary>
-  public sealed partial class Viseme : pb::IMessage<Viseme> {
+  [Serializable]
+  public partial class Viseme : pb::IMessage<Viseme> {
     private static readonly pb::MessageParser<Viseme> _parser = new pb::MessageParser<Viseme>(() => new Viseme());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

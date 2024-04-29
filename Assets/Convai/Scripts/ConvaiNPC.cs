@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Convai.Scripts.Utils;
+using DefaultNamespace;
 using Grpc.Core;
 using Service;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Logger = Convai.Scripts.Utils.Logger;
 #if UNITY_ANDROID
 using UnityEngine.Android;
@@ -23,8 +26,10 @@ namespace Convai.Scripts
         "https://docs.convai.com/api-docs/plugins-and-integrations/unity-plugin/overview-of-the-convainpc.cs-script")]
     public class ConvaiNPC : MonoBehaviour
     {
-
-        public TestMode testMode;
+        [Header("Recording")]
+        public TestConfig testConfig;
+        public bool allowPlayback;
+        
         private const int AUDIO_SAMPLE_RATE = 44100;
         private const string GRPC_API_ENDPOINT = "stream.convai.com";
         private const int RECORDING_FREQUENCY = AUDIO_SAMPLE_RATE;
@@ -56,6 +61,8 @@ namespace Convai.Scripts
 
         private readonly List<ResponseAudio> _responseAudios = new();
         public readonly Queue<GetResponseResponse> GetResponseResponses = new();
+        public readonly Queue<ResponseAudio> GetFillerResponses = new();
+
         private ActionConfig _actionConfig;
         private bool _animationPlaying;
         private AudioSource _audioSource;
@@ -350,7 +357,7 @@ namespace Convai.Scripts
         ///     Sends text data to the server asynchronously.
         /// </summary>
         /// <param name="text">The text to send.</param>
-        private async void SendTextDataAsync(string text)
+        public async void SendTextDataAsync(string text)
         {
             try
             {
@@ -399,7 +406,12 @@ namespace Convai.Scripts
         {
             // Check if the character is active and should process the response
             if (isCharacterActive)
-                if (GetResponseResponses.Count > 0)
+                if (GetFillerResponses.Count > 0)
+                {
+                    ResponseAudio response = GetFillerResponses.Dequeue();
+                    _responseAudios.Add(response);
+                }
+                else if (GetResponseResponses.Count > 0 && allowPlayback)
                 {
                     GetResponseResponse getResponseResponse = GetResponseResponses.Dequeue();
 
@@ -417,14 +429,28 @@ namespace Convai.Scripts
 
                             AudioClip clip = _grpcAPI.ProcessByteAudioDataToAudioClip(byteAudio,
                                 getResponseResponse.AudioResponse.AudioConfig.SampleRateHertz.ToString());
-
                             // Add the response audio along with associated data to the list
-                            _responseAudios.Add(new ResponseAudio
+                            ResponseAudio responseAudio = new ResponseAudio()
                             {
                                 AudioClip = clip,
                                 AudioTranscript = textDataString,
                                 IsFinal = false
-                            });
+                            };
+                            if (testConfig.recordMode)
+                            {
+                                var clipname = testConfig.GetNewClipName();
+                                if (SavWav.Save(clipname, clip))
+                                {
+                                    var audioClip = Resources.Load<AudioClip>(clipname);
+                                    testConfig.Set(new ResponseAudio
+                                    {
+                                        AudioClip = audioClip,
+                                        AudioTranscript = textDataString,
+                                        IsFinal = false
+                                    });
+                                }
+                            }
+                            _responseAudios.Add(responseAudio);
                         }
                     }
                     else if (getResponseResponse?.DebugLog != null)
@@ -519,19 +545,14 @@ namespace Convai.Scripts
                 }
         }
 
-        private class ResponseAudio
-        {
-            public AudioClip AudioClip;
-            public string AudioTranscript;
-            public bool IsFinal;
-        }
+        
     }
 
     [Serializable]
-    public enum TestMode
+    public class ResponseAudio
     {
-        None = 0,
-        GesturesAndFillerWords = 1,
-        LoadingBar = 2
+        public AudioClip AudioClip;
+        public string AudioTranscript;
+        public bool IsFinal;
     }
 }
