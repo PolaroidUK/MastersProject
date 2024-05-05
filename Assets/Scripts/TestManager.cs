@@ -8,6 +8,7 @@ using Service;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 using Random = System.Random;
 
 public class TestManager : MonoBehaviour
@@ -19,12 +20,16 @@ public class TestManager : MonoBehaviour
     [SerializeField] private KeyCode down = KeyCode.DownArrow;
     [SerializeField] private KeyCode play = KeyCode.P;
     [SerializeField] private KeyCode record = KeyCode.R;
+    [SerializeField] private Slider _slider;
+    
     private int phraseIndex = 0;
     private bool firstRun = true;
     private void Start()
     {
-        if (!testConfig.recordMode) return;
-        testConfig.InitializeResponseList(testConfig.recordingPhrases.Count);
+        if (testConfig.recordMode)
+        {
+            testConfig.InitializeResponseList(testConfig.recordingPhrases.Count);
+        }
     }
     private void OnDestroy() => testConfig.recordMode = false;
 
@@ -64,17 +69,9 @@ public class TestManager : MonoBehaviour
     private float timeSinceStartTalking = 0f;
     public IEnumerator FillerSequence()
     {
-        ConvaiNPCManager.Instance.activeConvaiNPC.allowPlayback = false;
         timeSinceStartTalking = Time.time;
         yield return new WaitForSeconds(testConfig.StartDelaySeconds);
-        switch (testMode)
-        {
-            case TestMode.GesturesAndFillerWords:
-                PlayRandomFiller();
-                break;
-            case TestMode.LoadingBar:
-                break;
-        }
+        PlayRandomFiller();
         while (ConvaiNPCManager.Instance.activeConvaiNPC.IsCharacterTalking)
         {
             yield return null;
@@ -84,9 +81,47 @@ public class TestManager : MonoBehaviour
         yield return new WaitForSeconds(Math.Max(0, GetNextValue()-timeSoFar));
         ConvaiNPCManager.Instance.activeConvaiNPC.allowPlayback = true;
     }
+
+    public IEnumerator EmptySequence()
+    {
+        yield return new WaitForSeconds(GetNextValue());
+        ConvaiNPCManager.Instance.activeConvaiNPC.allowPlayback = true;
+
+    }
+    public IEnumerator PlayLoadingBar()
+    {
+        yield return new WaitForSeconds(0.1f);
+        _slider.gameObject.SetActive(true);
+        _slider.value = 0f;
+        var startTime = Time.time;
+        float percentage;
+        const float initialFillTime = 1.4f;
+        while (Time.time - startTime < initialFillTime)
+        {
+            percentage = (Time.time - startTime) / initialFillTime;
+            _slider.value = math.remap(0f,1f,0f,0.7f, percentage);
+            yield return null;
+        }
+        var nextStartTime = Time.time;
+        var duration = GetNextValue() - initialFillTime - 0.1f;
+        var totalFillTime = 7 - initialFillTime;
+
+        while (Time.time - startTime < duration)  
+        {
+            percentage = (Time.time - nextStartTime) / totalFillTime;
+            _slider.value = math.remap(0f,1f,0.7f,1f, percentage);
+            yield return null;
+        }
+        _slider.value = 1f;
+        yield return new WaitForSeconds(0.08f);
+        _slider.value = 0f;
+        _slider.gameObject.SetActive(false);
+        ConvaiNPCManager.Instance.activeConvaiNPC.allowPlayback = true;
+    }
+
     private Random _random = new Random(Seed:Guid.NewGuid().GetHashCode());
-    private List<float> waitingValues = new List<float>() { 2, 3, 4, 5, 6, };
-    private List<float> defaultValues = new List<float>() { 2, 3, 4, 5, 6, };
+    private List<float> waitingValues = new List<float>() { 2, 3.25f, 4.5f, 5.75f, 7};
+    private List<float> defaultValues = new List<float>() { 2, 3.25f, 4.5f, 5.75f, 7};
     private float GetNextValue()
     {
         if (waitingValues.Count == 0)

@@ -15,8 +15,8 @@ MonoBehaviour:
   InitialFillupTime: 5
   _currentIndex: 0
   recordMode: 0
-  StartDelaySeconds: 0.5
-  AfterDelaySeconds: 1
+  StartDelaySeconds: 0.4
+  AfterDelaySeconds: 0.4
   recordingPhrases:
   - Hmmmmmmm
   - I think i remember

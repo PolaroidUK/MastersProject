@@ -428,11 +428,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3678168473786495893, guid: d48e039e0643fd848beb10345244dda6,
-        type: 3}
-      propertyPath: m_ApplyRootMotion
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4601294216393060716, guid: d48e039e0643fd848beb10345244dda6,
         type: 3}
       propertyPath: m_Name
@@ -441,7 +436,7 @@ PrefabInstance:
     - target: {fileID: 5688953437149733686, guid: d48e039e0643fd848beb10345244dda6,
         type: 3}
       propertyPath: characters.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6134347739156631632, guid: d48e039e0643fd848beb10345244dda6,
         type: 3}

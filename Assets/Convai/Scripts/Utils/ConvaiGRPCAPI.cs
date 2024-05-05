@@ -527,10 +527,6 @@ namespace Convai.Scripts.Utils
                     pos = newPos;
                 }
             }
-            if (!testConfig.recordMode && _testManager.testMode == TestMode.GesturesAndFillerWords)
-            {
-                _testManager.StartCoroutine(_testManager.FillerSequence());
-            }
             // Process any remaining audio data.
             await ProcessAudioChunk(call,
                 Microphone.GetPosition(MicrophoneManager.Instance.GetSelectedMicrophoneDevice()) - pos,
@@ -676,7 +672,6 @@ namespace Convai.Scripts.Utils
                         if (_chatUIHandler != null)
                             // Add user query to the list
                             _stringUserText.Add(result.UserQuery.TextData);
-
                     if (result.AudioResponse != null)
                     {
                         if (result.AudioResponse.TextData.Length > 0)

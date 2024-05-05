@@ -520,6 +520,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7972563156016224813, guid: d48e039e0643fd848beb10345244dda6,
+        type: 3}
+      propertyPath: m_Name
+      value: Convai NPC Eleanor
+      objectReference: {fileID: 0}
+    - target: {fileID: 8399081994995583153, guid: d48e039e0643fd848beb10345244dda6,
+        type: 3}
+      propertyPath: characterName
+      value: Eleanor
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

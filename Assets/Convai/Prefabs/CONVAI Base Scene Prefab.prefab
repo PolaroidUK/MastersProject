@@ -192,10 +192,13 @@ MonoBehaviour:
     characterName: John
     characterTextColor: {r: 1, g: 0.8, b: 0.6, a: 1}
   - characterGameObject: {fileID: 8399081994995583153}
-    characterName: Janet
+    characterName: Eleanor
     characterTextColor: {r: 0, g: 0.5, b: 0, a: 1}
+  - characterGameObject: {fileID: 1567169415394146999}
+    characterName: Eleanor
+    characterTextColor: {r: 1, g: 0, b: 0, a: 1}
   - characterGameObject: {fileID: 0}
-    characterName: Janet
+    characterName: Eleanor
     characterTextColor: {r: 1, g: 0, b: 0, a: 1}
   playerName: Player
   playerTextColor: {r: 0.16216493, g: 1, b: 0, a: 1}
@@ -244,6 +247,7 @@ Transform:
   - {fileID: 2972773431921296738}
   - {fileID: 5904562022379329498}
   - {fileID: 9188272266919338370}
+  - {fileID: 6220044284653891153}
   - {fileID: 6745061915324725455}
   - {fileID: 1590988964657966980}
   - {fileID: 3357143521081413527}
@@ -820,6 +824,11 @@ PrefabInstance:
       propertyPath: m_Avatar
       value: 
       objectReference: {fileID: 9000000, guid: ae5edc2b118d6c344a61c40c98ed633b, type: 2}
+    - target: {fileID: 3057256919096151053, guid: cdc90942670d86a48bc02c8314196957,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4971325647385478999, guid: cdc90942670d86a48bc02c8314196957,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -892,10 +901,20 @@ PrefabInstance:
       propertyPath: allowPlayback
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7919998684963944233, guid: cdc90942670d86a48bc02c8314196957,
+        type: 3}
+      propertyPath: characterName
+      value: Eleanor
+      objectReference: {fileID: 0}
     - target: {fileID: 8629688218171188661, guid: cdc90942670d86a48bc02c8314196957,
         type: 3}
       propertyPath: m_Name
-      value: Convai NPC Janet
+      value: Convai NPC Eleanor
+      objectReference: {fileID: 0}
+    - target: {fileID: 8629688218171188661, guid: cdc90942670d86a48bc02c8314196957,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1565,6 +1584,203 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1883788612738105476, guid: 3fc60925b72651f4d8454f2dc785e354,
     type: 3}
   m_PrefabInstance: {fileID: 7325037941936529666}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7442921790685527516
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6134347739156631632}
+    m_Modifications:
+    - target: {fileID: 3537745446580343693, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3537745446580343693, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3537745446580343693, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3537745446580343693, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3537745446580343693, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3537745446580343693, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3537745446580343693, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3537745446580343693, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3537745446580343693, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3537745446580343693, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4022801751594335956, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: ae5edc2b118d6c344a61c40c98ed633b, type: 2}
+    - target: {fileID: 4022801751594335956, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5004478211699022859, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      propertyPath: m_Name
+      value: Convai NPC Eleanor
+      objectReference: {fileID: 0}
+    - target: {fileID: 8283568495312996203, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      propertyPath: testConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: bc2429df8da146f4692928f6e64cf8d7,
+        type: 2}
+    - target: {fileID: 8283568495312996203, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      propertyPath: allowPlayback
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5004478211699022859, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4847617524875987736}
+    - targetCorrespondingSourceObject: {fileID: 5004478211699022859, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 561283220040381368}
+    - targetCorrespondingSourceObject: {fileID: 5004478211699022859, guid: a44d05bed4027b843b346cb4b0298f29,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1640357835334420681}
+  m_SourcePrefab: {fileID: 100100000, guid: a44d05bed4027b843b346cb4b0298f29, type: 3}
+--- !u!137 &1258613739090065173 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8520229307714407113, guid: a44d05bed4027b843b346cb4b0298f29,
+    type: 3}
+  m_PrefabInstance: {fileID: 7442921790685527516}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1567169415394146999 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8283568495312996203, guid: a44d05bed4027b843b346cb4b0298f29,
+    type: 3}
+  m_PrefabInstance: {fileID: 7442921790685527516}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2466261223639065047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b38e4bc919e1f040ba78aea7472893e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!137 &1904496423654226142 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 9017526448159343874, guid: a44d05bed4027b843b346cb4b0298f29,
+    type: 3}
+  m_PrefabInstance: {fileID: 7442921790685527516}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2466261223639065047 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5004478211699022859, guid: a44d05bed4027b843b346cb4b0298f29,
+    type: 3}
+  m_PrefabInstance: {fileID: 7442921790685527516}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4847617524875987736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2466261223639065047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88bce56f6985ef84f8835a0152628fa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsCharacterTalking: 0
+  faceModelType: 3
+  BlendshapeType: 1
+  HeadSkinnedMeshRenderer: {fileID: 1258613739090065173}
+  TeethSkinnedMeshRenderer: {fileID: 1904496423654226142}
+  TongueSkinnedMeshRenderer: {fileID: 0}
+  jawBone: {fileID: 0}
+  tongueBone: {fileID: 0}
+  tongueBoneOffset: {x: -0.01, y: 0.015, z: 0}
+  firstIndex: 0
+--- !u!114 &561283220040381368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2466261223639065047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47bf09eafaaeed940ab9e5531a64790c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetObject: {fileID: 0}
+  trackingDistance: 10
+  turnSpeed: 5
+  bodyLookAtWeight: 0.6
+  headLookAtWeight: 0.8
+  eyesLookAtWeight: 0.85
+  lookAway: 0
+--- !u!114 &1640357835334420681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2466261223639065047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b64bad04a93295642a4486f9899f8734, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  faceSkinnedMeshRenderer: {fileID: 1258613739090065173}
+  indexOfLeftEyelid: -1
+  indexOfRightEyelid: -1
+  minBlinkDuration: 0.2
+  maxBlinkDuration: 0.3
+  minBlinkInterval: 2
+  maxBlinkInterval: 3
+--- !u!4 &6220044284653891153 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3537745446580343693, guid: a44d05bed4027b843b346cb4b0298f29,
+    type: 3}
+  m_PrefabInstance: {fileID: 7442921790685527516}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9212045538387168019
 PrefabInstance:

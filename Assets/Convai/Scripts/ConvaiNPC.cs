@@ -264,6 +264,23 @@ namespace Convai.Scripts
             // Stop recording audio when the T key is released
             else if (ConvaiInputManager.Instance.WasTalkKeyReleased())
             {
+                if (!testConfig.recordMode)
+                {
+                    ConvaiNPCManager.Instance.activeConvaiNPC.allowPlayback = false;
+                    var _testManager = FindObjectOfType<TestManager>();
+                    switch (_testManager.testMode)
+                    {
+                        case TestMode.GesturesAndFillerWords:
+                            _testManager.StartCoroutine(_testManager.FillerSequence());
+                            break;
+                        case TestMode.LoadingBar:
+                            _testManager.StartCoroutine(_testManager.PlayLoadingBar());
+                            break;
+                        case TestMode.None:
+                            _testManager.StartCoroutine(_testManager.EmptySequence());
+                            break;
+                    }
+                }
                 StopListening();
             }
         }
