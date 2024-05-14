@@ -1,12 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Convai.Scripts;
 using Convai.Scripts.Utils;
 using DefaultNamespace;
 using Service;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = System.Random;
@@ -33,6 +37,42 @@ public class TestManager : MonoBehaviour
     }
     private void OnDestroy() => testConfig.recordMode = false;
 
+    private void OnApplicationQuit()
+    {
+        Save();
+    }
+
+    private void Save()
+    {
+        string root = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\\P10Data";
+        GetOrCreateDirectory(root);
+        
+        var currLargSubDirNr = new DirectoryInfo(root).GetDirectories()
+            .Where(e => int.TryParse(e.Name, out _))
+            .Select(e => int.Parse(e.Name))
+            .OrderByDescending(e => e)
+            .ToArray();
+        var path = currLargSubDirNr.Length == 0
+            ? $"{root}\\0"
+            : $"{root}\\{int.Parse(currLargSubDirNr.First().ToString()) + 1}";
+        GetOrCreateDirectory(path);
+
+        var chatboxParent = GameObject.Find("ChatBox").transform.parent;
+        var text = string.Join("\n", chatboxParent.GetComponentsInChildren<TextMeshProUGUI>().Select(e => e.text));
+        var sr = File.CreateText($"{path}/{SceneManager.GetActiveScene().name}.txt");
+        sr.WriteLine(RemoveRichText(text));
+        sr.Close();
+    }
+
+    private DirectoryInfo GetOrCreateDirectory(string path)
+    {
+        var directoryInfo = new DirectoryInfo(path);
+        if (!directoryInfo.Exists)
+        {
+            directoryInfo.Create();
+        }
+        return directoryInfo;
+    }
     void Update()
     {
         if (!testConfig.recordMode) return;
@@ -156,6 +196,90 @@ public class TestManager : MonoBehaviour
                     npc.convaiLipSync.faceDataList[^1].Add(visemesData);
                     break;
             }
+        }
+    }
+    public static string RemoveRichText(string input)
+    {
+ 
+        input = RemoveRichTextDynamicTag(input, "color");
+ 
+        input = RemoveRichTextTag(input, "b");
+        input = RemoveRichTextTag(input, "i");
+ 
+ 
+        // TMP
+        input = RemoveRichTextDynamicTag(input, "align");
+        input = RemoveRichTextDynamicTag(input, "size");
+        input = RemoveRichTextDynamicTag(input, "cspace");
+        input = RemoveRichTextDynamicTag(input, "font");
+        input = RemoveRichTextDynamicTag(input, "indent");
+        input = RemoveRichTextDynamicTag(input, "line-height");
+        input = RemoveRichTextDynamicTag(input, "line-indent");
+        input = RemoveRichTextDynamicTag(input, "link");
+        input = RemoveRichTextDynamicTag(input, "margin");
+        input = RemoveRichTextDynamicTag(input, "margin-left");
+        input = RemoveRichTextDynamicTag(input, "margin-right");
+        input = RemoveRichTextDynamicTag(input, "mark");
+        input = RemoveRichTextDynamicTag(input, "mspace");
+        input = RemoveRichTextDynamicTag(input, "noparse");
+        input = RemoveRichTextDynamicTag(input, "nobr");
+        input = RemoveRichTextDynamicTag(input, "page");
+        input = RemoveRichTextDynamicTag(input, "pos");
+        input = RemoveRichTextDynamicTag(input, "space");
+        input = RemoveRichTextDynamicTag(input, "sprite index");
+        input = RemoveRichTextDynamicTag(input, "sprite name");
+        input = RemoveRichTextDynamicTag(input, "sprite");
+        input = RemoveRichTextDynamicTag(input, "style");
+        input = RemoveRichTextDynamicTag(input, "voffset");
+        input = RemoveRichTextDynamicTag(input, "width");
+ 
+        input = RemoveRichTextTag(input, "u");
+        input = RemoveRichTextTag(input, "s");
+        input = RemoveRichTextTag(input, "sup");
+        input = RemoveRichTextTag(input, "sub");
+        input = RemoveRichTextTag(input, "allcaps");
+        input = RemoveRichTextTag(input, "smallcaps");
+        input = RemoveRichTextTag(input, "uppercase");
+        // TMP end
+ 
+ 
+        return input;
+ 
+    }
+ 
+ 
+ 
+    private static string RemoveRichTextDynamicTag (string input, string tag)
+    {
+        int index = -1;
+        while (true)
+        {
+            index = input.IndexOf($"<{tag}=");
+            //Debug.Log($"{{{index}}} - <noparse>{input}");
+            if (index != -1)
+            {
+                int endIndex = input.Substring(index, input.Length - index).IndexOf('>');
+                if (endIndex > 0)
+                    input = input.Remove(index, endIndex + 1);
+                continue;
+            }
+            input = RemoveRichTextTag(input, tag, false);
+            return input;
+        }
+    }
+    private static string RemoveRichTextTag (string input, string tag, bool isStart = true)
+    {
+        while (true)
+        {
+            int index = input.IndexOf(isStart ? $"<{tag}>" : $"</{tag}>");
+            if (index != -1)
+            {
+                input = input.Remove(index, 2 + tag.Length + (!isStart).GetHashCode());
+                continue;
+            }
+            if (isStart)
+                input = RemoveRichTextTag(input, tag, false);
+            return input;
         }
     }
 }
